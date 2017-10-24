@@ -1,23 +1,22 @@
 <template>
   <div class="hello">
-  
-    <canvas id="canvas" width="600" height="300">
-    </canvas>
-    <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
-      <el-form-item label="密码" prop="pass">
-        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="确认密码" prop="checkPass">
-        <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="年龄" prop="age">
-        <el-input v-model.number="ruleForm2.age"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
-        <el-button @click="resetForm('ruleForm2')">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="form">
+      <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="top" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="密码" prop="pass">
+          <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码" prop="checkPass">
+          <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="年龄" prop="age">
+          <el-input v-model.number="ruleForm2.age"></el-input>
+        </el-form-item>
+        <el-form-item style="text-align:center">
+          <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
+          <el-button @click="resetForm('ruleForm2')">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
@@ -79,54 +78,7 @@ export default {
       }
     }
   },
-  mounted: function () {
-    this.draw()
-  },
   methods: {
-    draw () {
-      var canvas = document.getElementById('canvas')
-      var ctx = canvas.getContext('2d')
-      var raf
-      var ball = {
-        x: 100,
-        y: 100,
-        vx: 5,
-        vy: 2,
-        radius: 25,
-        color: 'blue',
-        draw: function () {
-          ctx.beginPath()
-          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, true)
-          ctx.closePath()
-          ctx.fillStyle = this.color
-          ctx.fill()
-        }
-      }
-      function draw () {
-        ctx.fillStyle = 'rgba(255,255,255,0.3)'
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-        ball.draw()
-        ball.x += ball.vx
-        ball.y += ball.vy
-        ball.vy *= 0.99
-        ball.vy += 0.25
-        raf = window.requestAnimationFrame(draw)
-        if (ball.y + ball.vy > canvas.height || ball.y + ball.vy < 0) {
-          ball.vy = -ball.vy
-        }
-        if (ball.x + ball.vx > canvas.width || ball.x + ball.vx < 0) {
-          ball.vx = -ball.vx
-        }
-      }
-      canvas.addEventListener('mouseover', function (e) {
-        raf = window.requestAnimationFrame(draw)
-      })
-      canvas.addEventListener('mouseout', function (e) {
-        window.cancelAnimationFrame(raf)
-      })
-      ball.draw()
-    },
-
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -145,7 +97,7 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
+<style scoped>
 h1, h2 {
   font-weight: normal;
 }
@@ -163,12 +115,20 @@ li {
 a {
   color: #42b983;
 }
-
-.hello {
-  position: relative;
+.form {
+  display:block;
+  top: 0;
+  bottom: 0;
   margin: auto;
-  margin-top: 100px;
-  width: 60%;
-  // background: #000;
+  margin-top: 120px;
+  width: 30%;
+}
+.demo-ruleForm {
+  text-align: left; 
+}
+.hello {
+  width: 100%;
+  height: 100%;
+  background: #000;
 }
 </style>
