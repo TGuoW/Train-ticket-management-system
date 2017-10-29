@@ -1,13 +1,27 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-    <router-view/>
+    <hello v-show="!isLogin()"></hello>
+    <!-- <mainV></mainV> -->
   </div>
 </template>
 
 <script>
+import mainV from './components/main'
+import hello from './components/HelloWorld'
 export default {
-  name: 'app'
+  name: 'app',
+  data () {
+    return {
+      isLogin () {
+        return this.$store.state.isLogin
+      }
+    }
+  },
+  components: {
+    mainV,
+    hello
+  }
 }
 </script>
 

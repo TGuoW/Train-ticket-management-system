@@ -1,20 +1,21 @@
 <template>
   <div class="hello">
     <canvas id="canvas"></canvas>
+    <p>火车票管理系统</p>
     <div class="form">
       <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="top" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="密码" prop="pass">
+        <el-form-item label="账号" prop="pass" class="a">
           <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
         </el-form-item>
-        <el-form-item label="确认密码" prop="checkPass">
+        <el-form-item label="密码" prop="checkPass" class="a" size="">
           <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
         </el-form-item>
         <!-- <el-form-item label="年龄" prop="age">
           <el-input v-model.number="ruleForm2.age"></el-input>
         </el-form-item> -->
         <el-form-item style="text-align:center">
-          <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
-          <el-button @click="resetForm('ruleForm2')">重置</el-button>
+          <el-button type="primary" @click="submitForm('ruleForm2')" class="login">登录</el-button>
+          <!-- <el-button @click="resetForm('ruleForm2')">重置</el-button> -->
         </el-form-item>
       </el-form>
     </div>
@@ -22,6 +23,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: 'HelloWorld',
   data () {
@@ -110,47 +112,47 @@ export default {
         let t = Math.random()
         let w = (screen.width + 2) / 12
         if (t * 2 > 1) {
-          x1 = parseInt(Math.random() * w * 1.5 + w * 3 / 5)
+          x1 = parseInt(Math.random() * w * 1.2 + w * 2 / 5)
           y1 = parseInt(Math.random() * w / 3 + 100)
-          x2 = parseInt(Math.random() * w * 1.5 + w * 3 / 5)
+          x2 = parseInt(Math.random() * w * 1.2 + w * 2 / 5)
           y2 = parseInt(Math.random() * w / 3 + 100)
           line.draw(x1, y1, x2, y2)
         } else {
-          x1 = parseInt(Math.random() * w / 3 + w * 71 / 60)
+          x1 = parseInt(Math.random() * w / 3 + w * 5 / 6)
           y1 = parseInt(Math.random() * 400 + 100)
-          x2 = parseInt(Math.random() * w / 3 + w * 71 / 60)
+          x2 = parseInt(Math.random() * w / 3 + w * 5 / 6)
           y2 = parseInt(Math.random() * 400 + 100)
           line.draw(x1, y1, x2, y2)
         } // T
-        x1 = parseInt(Math.random() * w / 3 + w * 23 / 10)
+        x1 = parseInt(Math.random() * w / 3 + w * 67 / 30)
         y1 = parseInt(Math.random() * 400 + 100)
-        x2 = parseInt(Math.random() * w / 3 + w * 23 / 10)
+        x2 = parseInt(Math.random() * w / 3 + w * 67 / 30)
         y2 = parseInt(Math.random() * 400 + 100)
         line.draw(x1, y1, x2, y2) // I
         if (t * 3 > 2) {
-          x1 = parseInt(Math.random() * w * 1.5 + w * 87 / 30)
-          y1 = parseInt(Math.random() * 40 + 100)
-          x2 = parseInt(Math.random() * w * 1.5 + w * 87 / 30)
-          y2 = parseInt(Math.random() * 40 + 100)
+          x1 = parseInt(Math.random() * w * 1.2 + w * 96 / 30)
+          y1 = parseInt(Math.random() * w / 3 + 100)
+          x2 = parseInt(Math.random() * w * 1.2 + w * 96 / 30)
+          y2 = parseInt(Math.random() * w / 3 + 100)
           line.draw(x1, y1, x2, y2)
         } else if (t * 3 > 1) {
-          x1 = parseInt(Math.random() * w / 3 + w * 87 / 30)
+          x1 = parseInt(Math.random() * w / 3 + w * 96 / 30)
           y1 = parseInt(Math.random() * 400 + 100)
-          x2 = parseInt(Math.random() * w / 3 + w * 87 / 30)
+          x2 = parseInt(Math.random() * w / 3 + w * 96 / 30)
           y2 = parseInt(Math.random() * 400 + 100)
           line.draw(x1, y1, x2, y2)
         } else {
-          x1 = parseInt(Math.random() * w * 1.5 + w * 87 / 30)
-          y1 = parseInt(Math.random() * 40 + 460)
-          x2 = parseInt(Math.random() * w * 1.5 + w * 87 / 30)
-          y2 = parseInt(Math.random() * 40 + 460)
+          x1 = parseInt(Math.random() * w * 1.2 + w * 96 / 30)
+          y1 = parseInt(Math.random() * w / 3 + 460)
+          x2 = parseInt(Math.random() * w * 1.2 + w * 96 / 30)
+          y2 = parseInt(Math.random() * w / 3 + 460)
           line.draw(x1, y1, x2, y2)
         } // C
         if (t * 3 > 2) {
-          x1 = parseInt(Math.random() * w * 1.5 + w * 228 / 30)
-          y1 = parseInt(Math.random() * 60 + 100 + 200 - (x1 - w * 228 / 30))
-          x2 = parseInt(Math.random() * w * 1.5 + w * 228 / 30)
-          y2 = parseInt(Math.random() * 60 + 100 + 200 - (x2 - w * 228 / 30))
+          x1 = parseInt(Math.random() * w * 1.2 + w * 228 / 30)
+          y1 = parseInt(Math.random() * 60 + 100 + 200 - (x1 - w * 228 / 30) * 1.5)
+          x2 = parseInt(Math.random() * w * 1.2 + w * 228 / 30)
+          y2 = parseInt(Math.random() * 60 + 100 + 200 - (x2 - w * 228 / 30) * 1.5)
           line.draw(x1, y1, x2, y2)
         } else if (t * 3 > 1) {
           x1 = parseInt(Math.random() * w / 3 + w * 228 / 30)
@@ -159,57 +161,65 @@ export default {
           y2 = parseInt(Math.random() * 400 + 100)
           line.draw(x1, y1, x2, y2)
         } else {
-          x1 = parseInt(Math.random() * w * 1.5 + w * 228 / 30)
-          y1 = parseInt(Math.random() * 60 + 440 - 200 + (x1 - w * 228 / 30))
-          x2 = parseInt(Math.random() * w * 1.5 + w * 228 / 30)
-          y2 = parseInt(Math.random() * 60 + 440 - 200 + (x2 - w * 228 / 30))
+          x1 = parseInt(Math.random() * w * 1.2 + w * 228 / 30)
+          y1 = parseInt(Math.random() * 60 + 440 - 200 + (x1 - w * 228 / 30) * 1.5)
+          x2 = parseInt(Math.random() * w * 1.2 + w * 228 / 30)
+          y2 = parseInt(Math.random() * 60 + 440 - 200 + (x2 - w * 228 / 30) * 1.5)
           line.draw(x1, y1, x2, y2)
         } // K
         if (t * 4 > 3) {
-          x1 = parseInt(Math.random() * w * 1.5 + w * 279 / 30)
+          x1 = parseInt(Math.random() * w * 1.2 + w * 270 / 30)
           y1 = parseInt(Math.random() * 40 + 100)
-          x2 = parseInt(Math.random() * w * 1.5 + w * 279 / 30)
+          x2 = parseInt(Math.random() * w * 1.2 + w * 270 / 30)
           y2 = parseInt(Math.random() * 40 + 100)
           line.draw(x1, y1, x2, y2)
         } else if (t * 4 > 2) {
-          x1 = parseInt(Math.random() * w * 1.5 + w * 279 / 30)
+          x1 = parseInt(Math.random() * w * 1.2 + w * 270 / 30)
           y1 = parseInt(Math.random() * 40 + 280)
-          x2 = parseInt(Math.random() * w * 1.5 + w * 279 / 30)
+          x2 = parseInt(Math.random() * w * 1.2 + w * 270 / 30)
           y2 = parseInt(Math.random() * 40 + 280)
           line.draw(x1, y1, x2, y2)
         } else if (t * 4 > 1) {
-          x1 = parseInt(Math.random() * w * 1.5 + w * 279 / 30)
+          x1 = parseInt(Math.random() * w * 1.2 + w * 270 / 30)
           y1 = parseInt(Math.random() * 40 + 460)
-          x2 = parseInt(Math.random() * w * 1.5 + w * 279 / 30)
+          x2 = parseInt(Math.random() * w * 1.2 + w * 270 / 30)
           y2 = parseInt(Math.random() * 40 + 460)
           line.draw(x1, y1, x2, y2)
         } else {
-          x1 = parseInt(Math.random() * w / 3 + w * 279 / 30)
+          x1 = parseInt(Math.random() * w / 3 + w * 270 / 30)
           y1 = parseInt(Math.random() * 400 + 100)
-          x2 = parseInt(Math.random() * w / 3 + w * 279 / 30)
+          x2 = parseInt(Math.random() * w / 3 + w * 270 / 30)
           y2 = parseInt(Math.random() * 400 + 100)
           line.draw(x1, y1, x2, y2)
         }// E
         if (t * 2 > 1) {
-          x1 = parseInt(Math.random() * w * 1.5 + w * 11)
+          x1 = parseInt(Math.random() * w * 1.2 + w * 10.4)
           y1 = parseInt(Math.random() * 40 + 100)
-          x2 = parseInt(Math.random() * w * 1.5 + w * 11)
+          x2 = parseInt(Math.random() * w * 1.2 + w * 10.4)
           y2 = parseInt(Math.random() * 40 + 100)
           line.draw(x1, y1, x2, y2)
         } else {
-          x1 = parseInt(Math.random() * w / 3 + w * 139 / 12)
+          x1 = parseInt(Math.random() * w / 3 + w * 130 / 12)
           y1 = parseInt(Math.random() * 400 + 100)
-          x2 = parseInt(Math.random() * w / 3 + w * 139 / 12)
+          x2 = parseInt(Math.random() * w / 3 + w * 130 / 12)
           y2 = parseInt(Math.random() * 400 + 100)
           line.draw(x1, y1, x2, y2)
         } // T
       }, 10)
-      // line.draw(30, 300)
     },
     submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
+      let self = this
+      self.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!')
+          axios({
+            url: '/login',
+            method: 'post'
+          }).then((response) => {
+            console.log(response.data)
+            self.$store.commit('login', response.data)
+          }).catch((error) => {
+            console.log(error)
+          })
         } else {
           console.log('error submit!!')
           return false
@@ -238,9 +248,31 @@ li {
   display: inline-block;
   margin: 0 10px;
 }
-
+p {
+  position: fixed;
+  display:block;
+  left: 0;
+  right: 0;
+  top: 20px;
+  bottom: 0;
+  margin: auto;
+  font-size: 48px;
+  color: #000;
+  user-select: none;
+}
 a {
   color: #42b983;
+}
+/* .a {
+  label{
+    line-height: 14px;
+  }
+} */
+label {
+  line-height: 14px;
+}
+.login {
+  width: 100%;
 }
 .form {
   position: fixed;
@@ -255,6 +287,7 @@ a {
 }
 .demo-ruleForm {
   text-align: left; 
+  font-size: 10px;
 }
 .hello {
   position: absolute;
@@ -264,8 +297,6 @@ a {
   /* background: #000; */
 }
 #canvas {
-  /* height: 100%;
-  width: 100%; */
-  /* background: #000; */
+  opacity: 0.2;
 }
 </style>
