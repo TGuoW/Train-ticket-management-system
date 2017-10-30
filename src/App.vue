@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-    <hello v-show="!isLogin()"></hello>
-    <!-- <mainV></mainV> -->
+    <hello v-if="!isLogin()"></hello>
+    <mainV v-else></mainV>
   </div>
 </template>
 
