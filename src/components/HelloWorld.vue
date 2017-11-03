@@ -3,21 +3,46 @@
     <canvas id="canvas"></canvas>
     <p>火车票管理系统</p>
     <div class="form">
-      <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="top" label-width="100px" class="demo-ruleForm">
-        <el-form-item label="账号" prop="pass" class="a">
-          <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="checkPass" class="a" size="">
-          <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
-        </el-form-item>
-        <!-- <el-form-item label="年龄" prop="age">
-          <el-input v-model.number="ruleForm2.age"></el-input>
-        </el-form-item> -->
-        <el-form-item style="text-align:center">
-          <el-button type="primary" @click="submitForm('ruleForm2')" class="login">登录</el-button>
-          <!-- <el-button @click="resetForm('ruleForm2')">重置</el-button> -->
-        </el-form-item>
-      </el-form>
+      <el-tabs v-model="activeName2" @tab-click="handleClick">
+        <el-tab-pane label="用户登陆" name="first">
+          <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="40px" class="demo-ruleForm">
+            <el-form-item label="账号" prop="pass">
+              <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="checkPass" style="margin-bottom:10px;">
+              <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item style="margin-bottom:0px;">
+              <el-radio v-model="radio" label="1">乘客</el-radio>
+              <el-radio v-model="radio" label="2">管理员</el-radio>
+            </el-form-item>
+            <el-form-item style="text-align:center">
+              <el-button type="primary" @click="submitForm('ruleForm2')" class="login">登录</el-button>
+              <!-- <el-button @click="resetForm('ruleForm2')">重置</el-button> -->
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label="乘客注册" name="second">
+          <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="40px" class="demo-ruleForm">
+            <el-form-item label="账号" prop="pass">
+              <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="checkPass" style="margin-bottom:10px;">
+              <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="密码" prop="checkPass" style="margin-bottom:10px;">
+              <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item style="margin-bottom:0px;">
+              <el-radio v-model="radio" label="1">乘客</el-radio>
+              <el-radio v-model="radio" label="2">管理员</el-radio>
+            </el-form-item>
+            <el-form-item style="text-align:center">
+              <el-button type="success" @click="submitForm('ruleForm2')" class="login">注册</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
@@ -27,22 +52,6 @@ import axios from 'axios'
 export default {
   name: 'HelloWorld',
   data () {
-    var checkAge = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('年龄不能为空'))
-      }
-      setTimeout(() => {
-        if (!Number.isInteger(value)) {
-          callback(new Error('请输入数字值'))
-        } else {
-          if (value < 18) {
-            callback(new Error('必须年满18岁'))
-          } else {
-            callback()
-          }
-        }
-      }, 1000)
-    }
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'))
@@ -63,6 +72,8 @@ export default {
       }
     }
     return {
+      activeName2: 'first',
+      radio: 0,
       ruleForm2: {
         pass: '',
         checkPass: '',
@@ -74,9 +85,6 @@ export default {
         ],
         checkPass: [
           { validator: validatePass2, trigger: 'blur' }
-        ],
-        age: [
-          { validator: checkAge, trigger: 'blur' }
         ]
       }
     }
@@ -207,6 +215,9 @@ export default {
         } // T
       }, 10)
     },
+    handleClick (tab, event) {
+      console.log(tab, event)
+    },
     submitForm (formName) {
       let self = this
       self.$refs[formName].validate((valid) => {
@@ -276,6 +287,7 @@ label {
 }
 .form {
   position: fixed;
+  text-align: center;
   display:block;
   left: 0;
   right: 0;
@@ -287,6 +299,7 @@ label {
 }
 .demo-ruleForm {
   text-align: left; 
+  margin-left: -40px;
   font-size: 10px;
 }
 .hello {

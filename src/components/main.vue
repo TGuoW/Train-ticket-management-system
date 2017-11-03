@@ -40,10 +40,15 @@
 <style lang="scss" scoped>
   span {
     float: left;
+    cursor: default;
     color: #fff;
     font-size: 24px;
     line-height: 61px;
     padding-left: 60px;
     padding-right: 60px;
+    user-select: none;
+    &:focus {
+      outline: none;
+    }
   }
 </style>
