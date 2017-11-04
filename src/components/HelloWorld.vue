@@ -1,41 +1,47 @@
 <template>
   <div class="hello">
     <canvas id="canvas"></canvas>
-    <p>火车票管理系统</p>
+    <p>火车票务管理系统</p>
     <div class="form">
-      <el-tabs v-model="activeName2" @tab-click="handleClick">
+      <el-tabs v-model="activeName2" @tab-click="handleClick" style="width:100%">
         <el-tab-pane label="用户登陆" name="first">
-          <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="40px" class="demo-ruleForm">
-            <el-form-item label="账号" prop="pass">
-              <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+          <el-form
+            :model="ruleForm1" 
+            :rules="rules1" 
+            ref="ruleForm1" 
+            label-position="left" 
+            label-width="40px" 
+            class="demo-ruleForm">
+            <el-form-item 
+              label="账号" 
+              prop="acount">
+              <el-input 
+              v-model="ruleForm1.acount" auto-complete="off" placeholder="账号"></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="checkPass" style="margin-bottom:10px;">
-              <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+            <el-form-item label="密码" prop="pass" style="margin-bottom:10px;">
+              <el-input type="password" v-model="ruleForm1.pass" auto-complete="off" placeholder="密码"></el-input>
             </el-form-item>
-            <el-form-item style="margin-bottom:0px;">
-              <el-radio v-model="radio" label="1">乘客</el-radio>
-              <el-radio v-model="radio" label="2">管理员</el-radio>
+            <el-form-item prop="identity" style="margin-top:-10px;">
+              <el-radio-group v-model="ruleForm1.identity" size="medium" style="margin-bottom:-20px;">
+                <el-radio label="1">乘客</el-radio>
+                <el-radio label="2">管理员</el-radio>
+              </el-radio-group>
             </el-form-item>
             <el-form-item style="text-align:center">
-              <el-button type="primary" @click="submitForm('ruleForm2')" class="login">登录</el-button>
-              <!-- <el-button @click="resetForm('ruleForm2')">重置</el-button> -->
+              <el-button type="primary" @click="submitForm('ruleForm1')" class="login">登录</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
-        <el-tab-pane label="乘客注册" name="second">
+        <el-tab-pane label="乘客注册" name="second" style="margin:auto;text-align:center;">
           <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="40px" class="demo-ruleForm">
-            <el-form-item label="账号" prop="pass">
-              <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+            <el-form-item label="账号" prop="acount">
+              <el-input v-model="ruleForm2.acount" auto-complete="off" placeholder="账号"></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="checkPass" style="margin-bottom:10px;">
-              <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+            <el-form-item label="密码" prop="pass">
+              <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="密码"></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="checkPass" style="margin-bottom:10px;">
-              <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item style="margin-bottom:0px;">
-              <el-radio v-model="radio" label="1">乘客</el-radio>
-              <el-radio v-model="radio" label="2">管理员</el-radio>
+            <el-form-item label="密码" prop="checkPass">
+              <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="再次输入密码"></el-input>
             </el-form-item>
             <el-form-item style="text-align:center">
               <el-button type="success" @click="submitForm('ruleForm2')" class="login">注册</el-button>
@@ -52,19 +58,30 @@ import axios from 'axios'
 export default {
   name: 'HelloWorld',
   data () {
+    var validateAcount = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入账号'))
+      } else {
+        callback()
+      }
+    }
     var validatePass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入密码'))
       } else {
-        if (this.ruleForm2.checkPass !== '') {
-          this.$refs.ruleForm2.validateField('checkPass')
-        }
         callback()
       }
     }
-    var validatePass2 = (rule, value, callback) => {
+    var validateIdentity = (rule, value, callback) => {
+      if (value === 0) {
+        callback(new Error('请选择您的身份'))
+      } else {
+        callback()
+      }
+    }
+    var validateCheckPass = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请再次输入密码'))
+        callback(new Error('请输入确认密码'))
       } else if (value !== this.ruleForm2.pass) {
         callback(new Error('两次输入密码不一致!'))
       } else {
@@ -73,18 +90,39 @@ export default {
     }
     return {
       activeName2: 'first',
-      radio: 0,
-      ruleForm2: {
+      ruleForm1: {
+        acount: '',
         pass: '',
-        checkPass: '',
-        age: ''
+        identity: 0
+      },
+      ruleForm2: {
+        acount: '',
+        pass: '',
+        checkPass: ''
+      },
+      rules1: {
+        acount: [
+          { validator: validateAcount, trigger: 'blur' }
+        ],
+        pass: [
+          { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
+          { validator: validatePass, trigger: 'blur' }
+        ],
+        identity: [
+          { validator: validateIdentity, trigger: 'blur' }
+        ]
       },
       rules2: {
+        acount: [
+          { validator: validateAcount, trigger: 'blur' }
+        ],
         pass: [
+          { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
           { validator: validatePass, trigger: 'blur' }
         ],
         checkPass: [
-          { validator: validatePass2, trigger: 'blur' }
+          { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
+          { validator: validateCheckPass, trigger: 'blur' }
         ]
       }
     }
@@ -220,6 +258,7 @@ export default {
     },
     submitForm (formName) {
       let self = this
+      console.log(self.$refs[formName])
       self.$refs[formName].validate((valid) => {
         if (valid) {
           axios({
@@ -227,7 +266,7 @@ export default {
             method: 'post'
           }).then((response) => {
             console.log(response.data)
-            self.$store.commit('login', response.data)
+            // self.$store.commit('login', response.data)
           }).catch((error) => {
             console.log(error)
           })
@@ -300,6 +339,7 @@ label {
 .demo-ruleForm {
   text-align: left; 
   margin-left: -40px;
+  margin-top: 10px;
   font-size: 10px;
 }
 .hello {
