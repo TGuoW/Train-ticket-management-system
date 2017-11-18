@@ -16,7 +16,10 @@
               label="账号" 
               prop="acount">
               <el-input 
-              v-model="ruleForm1.acount" auto-complete="off" placeholder="账号"></el-input>
+              v-model="ruleForm1.acount"
+              auto-complete="off" 
+              placeholder="账号">
+              </el-input>
             </el-form-item>
             <el-form-item label="密码" prop="pass" style="margin-bottom:10px;">
               <el-input type="password" v-model="ruleForm1.pass" auto-complete="off" placeholder="密码"></el-input>
