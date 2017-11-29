@@ -1,8 +1,9 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-    <hello v-if="isLogin()"></hello>
-    <mainV v-else></mainV>
+    <!-- <hello v-if="!isLogin()"></hello>
+    <mainV v-else></mainV> -->
+    <router-view></router-view>
   </div>
 </template>
 

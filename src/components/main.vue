@@ -2,28 +2,25 @@
   <div>
     <el-menu
       :default-active="activeIndex2"
-      class="el-menu-demo"
+      class="el-menu-demo top"
       mode="horizontal"
       @select="handleSelect"
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b">
       <span>火车票管理系统</span>
-      <el-menu-item index="1">处理中心</el-menu-item>
-      <el-submenu index="2">
-        <template slot="title">我的工作台</template>
-        <el-menu-item index="2-1">选项1</el-menu-item>
-        <el-menu-item index="2-2">选项2</el-menu-item>
-        <el-menu-item index="2-3">选项3</el-menu-item>
-      </el-submenu>
-      <el-menu-item index="3"><a href="https://www.ele.me" target="_blank">订单管理</a></el-menu-item>
+      <el-menu-item index="1" @click="$router.push({path: '/main/train'})">车次管理</el-menu-item>
+      <el-menu-item index="2" @click="$router.push({path: '/main/passenger'})">乘客管理</el-menu-item>
     </el-menu>
-    <cMap></cMap>
+    <div class="item">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
   import cMap from './map.vue'
+  // import train from './train.vue'
   export default {
     data () {
       return {
@@ -55,5 +52,20 @@
     &:focus {
       outline: none;
     }
+  }
+  .top {
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+    top: 0;
+  }
+  .item {
+    // position: fixed;
+    // top: 0;
+    // bottom: 0;
+    width: 80%;
+    margin: 50px auto;
+    // overflow: hidden;
+    // background: #000;
   }
 </style>

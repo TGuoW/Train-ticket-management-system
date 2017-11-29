@@ -288,11 +288,10 @@ var convertData1 = function (data) {
 //设置一些可选的参数
 var option = {
     //设置背景颜色
-    backgroundColor: '#f3f3f3',
+    backgroundColor: '#fff',
     //设置图片标题、子标题、文本颜色等等
     title: {
         text: 'echarts使用1',
-        subtext: 'made by 刘冲',
         left: 'center',
         textStyle: {
             color: '#000'
@@ -309,7 +308,7 @@ var option = {
             }
         },
         //是否可以点击鼠标、滚轮缩放
-        roam: true,
+        // roam: true,
     },
     //series就是要绘制的地图的主体。是一个数组，也就是说可以有多个数据进行绘制。这里有两个，一个是两个城市的连线，一个是对两个城市进行高亮显示。其中的type是很重要的参数，主要有饼图、条形图、线、地图等等。具体的可以去参考官网上的配置手册。
     series : 

@@ -270,6 +270,7 @@ export default {
           }).then((response) => {
             console.log(response.data)
             // self.$store.commit('login', response.data)
+            self.$router.push({path: '/main'})
           }).catch((error) => {
             console.log(error)
           })
