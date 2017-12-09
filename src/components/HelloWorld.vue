@@ -263,14 +263,15 @@ export default {
       let self = this
       console.log(self.$refs[formName])
       self.$refs[formName].validate((valid) => {
-        if (valid) {
+        if (!valid) {
           axios({
-            url: '/login',
-            method: 'post'
+            url: 'http://39.108.221.165/ttmsb/app.py',
+            method: 'post',
+            data: 'jsonp'
           }).then((response) => {
             console.log(response.data)
             // self.$store.commit('login', response.data)
-            self.$router.push({path: '/main'})
+            // self.$router.push({path: '/main'})
           }).catch((error) => {
             console.log(error)
           })

@@ -30,7 +30,7 @@
         </el-form-item>
       </el-form>
     </el-col>
-    <el-col :span="4">
+    <el-col :span="6">
       <el-button type="primary" class="add-train">增加车次信息</el-button>
     </el-col>
   </el-header>
@@ -39,8 +39,8 @@
       :data="tableData"
       stripe
       border
-      style="width: 82%;margin:auto;text-align:left"
-      height="500">
+      style="width: 82%;margin:0 auto;text-align:left"
+      height="450">
       <el-table-column
         prop="date"
         label="序号">
@@ -76,7 +76,7 @@
 
 <style scoped>
   .main {
-    margin-top: 30px;
+    margin-bottom: -20px;
   }
   .add-train {
     position: absolute;

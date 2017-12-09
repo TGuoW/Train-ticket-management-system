@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import train from '@/components/train'
+import analysis from '@/components/analysis'
 import main from '@/components/main'
 import passenger from '@/components/passenger'
 
@@ -29,6 +30,10 @@ export default new Router({
         {
           path: 'passenger',
           component: passenger
+        },
+        {
+          path: 'analysis',
+          component: analysis
         }
       ]
     }
