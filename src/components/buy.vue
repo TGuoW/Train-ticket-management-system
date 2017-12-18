@@ -4,17 +4,25 @@
     <el-button type="primary" class="add-train">增加车次信息</el-button>
   </el-header> -->
   <el-header class="main">
-    <el-col :span="22">
+    <el-col :span="22" :offset="1">
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item>
           <el-row type="flex" class="row-bg" justify="space-between">
-            <el-col :span="5" :offset="3">
+            <el-col :span="5">
               <el-input
-                placeholder="请输入姓名或身份证号"
+                placeholder="请输入出发地"
+                suffix-icon="el-icon-location"
                 v-model="form.departure">
               </el-input>
             </el-col>
-            <el-col :span="9">
+            <el-col :span="5">
+              <el-input
+                placeholder="请输入到达地"
+                suffix-icon="el-icon-location"
+                v-model="form.destination">
+              </el-input>
+            </el-col>
+            <el-col :span="5">
               <!-- <span class="demonstration">日期</span> -->
               <el-date-picker
                 v-model="form.date"
@@ -30,11 +38,8 @@
         </el-form-item>
       </el-form>
     </el-col>
-    <!-- <el-col :span="6">
-      <el-button type="primary" class="add-train">增加车次信息</el-button>
-    </el-col> -->
   </el-header>
-  <el-main v-if="isShow">
+  <el-main>
     <el-table
       :data="tableData"
       stripe
@@ -47,11 +52,11 @@
       </el-table-column>
       <el-table-column
         prop="date"
-        label="姓名">
+        label="日期">
       </el-table-column>
       <el-table-column
         prop="name"
-        label="日期">
+        label="车次">
       </el-table-column>
       <el-table-column
         prop="address"
@@ -69,15 +74,14 @@
         prop="address"
         label="到达时间">
       </el-table-column>
-      <el-table-column>
+      <el-table-column
+        label="操作"
+        width="160">
         <template slot-scope="scope">
-          <el-button type="text" @click="viewPassenger">查看</el-button>
+          <el-button type="primary" size="mini">预订</el-button>
         </template>
       </el-table-column>
     </el-table>
-  </el-main>
-  <el-main v-else>
-    <pd v-on:back="backk"></pd>
   </el-main>
 </el-container>
 </template>
@@ -93,50 +97,20 @@
 </style>
 
 <script>
-  import pd from './passenger-detail.vue'
   export default {
-    components: {
-      pd
-    },
     data () {
       return {
-        isShow: 1,
         form: {
-          region: '',
+          departure: '',
+          destination: '',
           date: ''
         },
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上'
-        }]
+        tableData: []
       }
     },
     methods: {
       onSubmit () {
         console.log('submit!')
-      },
-      viewPassenger () {
-        this.isShow = 0
-      },
-      backk (res) {
-        this.isShow = 1
       }
     }
   }

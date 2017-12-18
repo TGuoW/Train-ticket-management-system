@@ -5,6 +5,7 @@ import train from '@/components/train'
 import analysis from '@/components/analysis'
 import main from '@/components/main'
 import passenger from '@/components/passenger'
+import buy from '@/components/buy'
 
 Vue.use(Router)
 
@@ -34,6 +35,10 @@ export default new Router({
         {
           path: 'analysis',
           component: analysis
+        },
+        {
+          path: 'buy',
+          component: buy
         }
       ]
     }

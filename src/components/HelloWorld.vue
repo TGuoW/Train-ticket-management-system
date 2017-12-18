@@ -261,17 +261,21 @@ export default {
     },
     submitForm (formName) {
       let self = this
-      console.log(self.$refs[formName])
       self.$refs[formName].validate((valid) => {
-        if (!valid) {
+        if (valid) {
           axios({
-            url: 'http://39.108.221.165/ttmsb/app.py',
+            url: '/login',
             method: 'post',
-            data: 'jsonp'
+            data: 'json'
           }).then((response) => {
-            console.log(response.data)
-            // self.$store.commit('login', response.data)
-            // self.$router.push({path: '/main'})
+            console.log(self.ruleForm1)
+            if (self.ruleForm1.identity === '1') {
+              self.$store.commit('login', 1)
+              self.$router.push({path: '/main/buy'})
+            } else if (self.ruleForm1.identity === '2') {
+              self.$store.commit('login', 2)
+              self.$router.push({path: '/main/train'})
+            }
           }).catch((error) => {
             console.log(error)
           })

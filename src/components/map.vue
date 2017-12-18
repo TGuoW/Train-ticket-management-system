@@ -1,5 +1,5 @@
 <template>
-  <div id="chmap" style="width:800px; height:500px;margin: auto;"></div>
+  <div id="chmap" style="width:600px; height:450px;margin: auto;"></div>
 </template>
 
 <style lang="scss" scoped>
@@ -290,13 +290,13 @@ var option = {
     //设置背景颜色
     backgroundColor: '#fff',
     //设置图片标题、子标题、文本颜色等等
-    title: {
-        text: 'echarts使用1',
-        left: 'center',
-        textStyle: {
-            color: '#000'
-        }
-    },
+    // title: {
+    //     text: 'echarts使用1',
+    //     left: 'center',
+    //     textStyle: {
+    //         color: '#000'
+    //     }
+    // },
     tooltip : {
         trigger: 'item'
     },

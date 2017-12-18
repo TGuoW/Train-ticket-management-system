@@ -1,15 +1,12 @@
 <template>
   <div id="app">
-    <!-- <img src="./assets/logo.png"> -->
-    <!-- <hello v-if="!isLogin()"></hello>
-    <mainV v-else></mainV> -->
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import mainV from './components/main'
-import hello from './components/HelloWorld'
+// import mainV from './components/main'
+// import hello from './components/HelloWorld'
 export default {
   name: 'app',
   data () {
@@ -18,10 +15,10 @@ export default {
         return this.$store.state.isLogin
       }
     }
-  },
-  components: {
-    mainV,
-    hello
+  // },
+  // components: {
+  //   mainV,
+  //   hello
   }
 }
 </script>
