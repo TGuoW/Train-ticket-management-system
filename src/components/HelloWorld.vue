@@ -37,17 +37,23 @@
         </el-tab-pane>
         <el-tab-pane label="乘客注册" name="second" style="margin:auto;text-align:center;">
           <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="40px" class="demo-ruleForm">
-            <el-form-item label="账号" prop="acount">
-              <el-input v-model="ruleForm2.acount" auto-complete="off" placeholder="账号"></el-input>
+            <el-form-item>
+              <el-input v-model="ruleForm2.identityNumber" auto-complete="off" placeholder="身份证号"></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="pass">
-              <el-input type="password" v-model="ruleForm2.pass" auto-complete="off" placeholder="密码"></el-input>
+            <el-form-item>
+              <el-input v-model="ruleForm2.realName" auto-complete="off" placeholder="真实姓名"></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="checkPass">
-              <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="再次输入密码"></el-input>
+            <el-form-item>
+              <el-input v-model="ruleForm2.userName" auto-complete="off" placeholder="用户名"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input type="password" v-model="ruleForm2.password" auto-complete="off" placeholder="密码"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="ruleForm2.phoneNumber" auto-complete="off" placeholder="联系方式"></el-input>
             </el-form-item>
             <el-form-item style="text-align:center">
-              <el-button type="success" @click="submitForm('ruleForm2')" class="login">注册</el-button>
+              <el-button type="success" @click="registered()" class="login">注册</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -99,9 +105,11 @@ export default {
         identity: 0
       },
       ruleForm2: {
-        acount: '',
-        pass: '',
-        checkPass: ''
+        identityNumber: '',
+        realName: '',
+        userName: '',
+        password: '',
+        phoneNumber: ''
       },
       rules1: {
         acount: [
@@ -261,19 +269,25 @@ export default {
     },
     submitForm (formName) {
       let self = this
+      console.log(this.ruleForm1)
       self.$refs[formName].validate((valid) => {
         if (valid) {
           axios({
-            url: '/login',
+            url: '/validateLogin',
             method: 'post',
-            data: 'json'
+            data: {
+              '用户名': self.ruleForm1.acount,
+              '密码': self.ruleForm1.password,
+              '身份': self.ruleForm1.identity
+            }
           }).then((response) => {
-            console.log(self.ruleForm1)
             if (self.ruleForm1.identity === '1') {
-              self.$store.commit('login', 1)
+              self.$store.commit('login', response.data)
+              self.$store.commit('c', 1)
               self.$router.push({path: '/main/buy'})
             } else if (self.ruleForm1.identity === '2') {
-              self.$store.commit('login', 2)
+              self.$store.commit('login', response.data)
+              self.$store.commit('c', 2)
               self.$router.push({path: '/main/train'})
             }
           }).catch((error) => {
@@ -283,6 +297,41 @@ export default {
           console.log('error submit!!')
           return false
         }
+      })
+    },
+    registered () {
+      let self = this
+      axios({
+        url: '/signUp',
+        method: 'post',
+        data: {
+          '身份证号': self.ruleForm2.identityNumber,
+          '名字': self.ruleForm2.realName,
+          '用户名': self.ruleForm2.userName,
+          '密码': self.ruleForm2.password,
+          '联系方式': self.ruleForm2.phoneNumber
+        }
+      }).then((response) => {
+        console.log('注册成功')
+        this.$alert('注册成功', '提示', {
+          confirmButtonText: '确定',
+          callback: action => {
+            this.$message({
+              type: 'info'
+            })
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+        this.ruleForm2 = {
+          identityNumber: '',
+          realName: '',
+          userName: '',
+          password: '',
+          phoneNumber: ''
+        }
+      }).catch((error) => {
+        console.log(error)
       })
     },
     resetForm (formName) {
@@ -342,7 +391,7 @@ label {
   top: 0;
   bottom: 0;
   margin: auto;
-  margin-top: 180px;
+  margin-top: 130px;
   width: 18%;
 }
 .demo-ruleForm {

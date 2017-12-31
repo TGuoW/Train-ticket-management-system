@@ -1,19 +1,15 @@
 <template>
 <el-container>
-  <!-- <el-header>
-    <el-button type="primary" class="add-train">增加车次信息</el-button>
-  </el-header> -->
   <el-header class="main">
     <el-col :span="18">
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item>
           <el-row type="flex" class="row-bg" justify="space-between">
             <el-col :span="6" :offset="3">
-              <el-input v-model="form.region" placeholder="输入车次">
+              <el-input v-model="form.trainNumber" placeholder="输入车次">
               </el-input>
             </el-col>
             <el-col :span="9">
-              <!-- <span class="demonstration">日期</span> -->
               <el-date-picker
                 v-model="form.date"
                 type="date"
@@ -21,8 +17,7 @@
               </el-date-picker>
             </el-col>
             <el-col :span="6">
-              <el-button type="primary" @click="onSubmit">查询</el-button>
-              <!-- <el-button>重置</el-button> -->
+              <el-button type="primary" @click="search()">查询</el-button>
             </el-col>
           </el-row>
         </el-form-item>
@@ -32,40 +27,62 @@
       <el-button type="primary" class="add-train" @click="dialogVisible = true;add()">增加车次信息</el-button>
     </el-col>
   </el-header>
-  <el-main>
+  <el-main style="width:79.8%;margin:0 auto;">
     <el-table
       :data="tableData"
       stripe
       border
-      style="width: 82%;margin:0 auto;text-align:left"
+      style="text-align:left;"
       height="450">
       <el-table-column
         prop="number"
-        label="序号">
+        label="序号"
+        width="80">
       </el-table-column>
-      <!-- <el-table-column
-        prop="date"
-        label="日期">
-      </el-table-column> -->
       <el-table-column
         prop="trainNumber"
-        label="车次">
+        label="车次"
+        width="80">
       </el-table-column>
       <el-table-column
-        prop="departure"
-        label="始发站">
-      </el-table-column>
-      <el-table-column
-        prop="arrival"
-        label="到达站">
+        prop="date"
+        label="日期"
+        width="120">
       </el-table-column>
       <el-table-column
         prop="departureTime"
-        label="出发时间">
+        label="发车时间"
+        width="80">
       </el-table-column>
       <el-table-column
-        prop="arrivalTime"
-        label="到达时间">
+        prop="departure"
+        label="始发站"
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="arrival"
+        label="终点站"
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="trainType"
+        label="车型"
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="availableTicket"
+        label="可售票数"
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="soldTicket"
+        label="已售票数"
+        width="80">
+      </el-table-column>
+      <el-table-column
+        prop="lastTicket"
+        label="剩余票数"
+        width="80">
       </el-table-column>
       <el-table-column
         label="操作"
@@ -80,35 +97,47 @@
     <el-dialog title="车次信息" :visible.sync="dialogVisible">
       <el-form :model="Dialog">
         <el-form-item>
-          <el-col :span="3" :offset="1">车次</el-col>
-          <el-col :span="7">
+          <el-col :span="3">车次</el-col>
+          <el-col :span="5">
             <el-input v-model="Dialog.trainNumber" auto-complete="off"></el-input>
           </el-col>
-          <!-- <el-col>日期</el-col>
-          <el-input v-model="Dialog.date" auto-complete="off"></el-input> -->
-        </el-form-item>
-        <el-form-item>
-          <el-col :span="3" :offset="1">出发地</el-col>
-          <el-col :span="7">
-            <el-input v-model="Dialog.departure" auto-complete="off"></el-input>
+          <el-col :span="3">日期</el-col>
+          <el-col :span="5">
+            <el-input v-model="Dialog.date" auto-complete="off"></el-input>
           </el-col>
-        <!-- </el-form-item>
-        <el-form-item label="出发时间" :label-width="formLabelWidth"> -->
-          <el-col :span="4">出发时间</el-col>
-          <el-col :span="7">
+          <el-col :span="3">发车时间</el-col>
+          <el-col :span="5">
             <el-input v-model="Dialog.departureTime" auto-complete="off"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item>
-          <el-col :span="3" :offset="1">到达地</el-col>
-          <el-col :span="7">
+          <el-col :span="3">车型</el-col>
+          <el-col :span="5">
+            <el-input v-model="Dialog.trainType" auto-complete="off"></el-input>
+          </el-col>
+        </el-form-item>
+        <el-form-item>
+          <el-col :span="3">始发站</el-col>
+          <el-col :span="5">
+            <el-input v-model="Dialog.departure" auto-complete="off"></el-input>
+          </el-col>
+          <el-col :span="3">到达站</el-col>
+          <el-col :span="5">
             <el-input v-model="Dialog.arrival" auto-complete="off"></el-input>
           </el-col>
-        <!-- </el-form-item>
-        <el-form-item label="到达时间" :label-width="formLabelWidth"> -->
-          <el-col :span="4">到达时间</el-col>
-          <el-col :span="7">
-            <el-input v-model="Dialog.arrivalTime" auto-complete="off"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-col :span="3">可售票数</el-col>
+          <el-col :span="5">
+            <el-input v-model="Dialog.availableTicket" auto-complete="off"></el-input>
+          </el-col>
+          <el-col :span="3">已售票数</el-col>
+          <el-col :span="5">
+            <el-input v-model="Dialog.soldTicket" auto-complete="off"></el-input>
+          </el-col>
+          <el-col :span="3">剩余票数</el-col>
+          <el-col :span="5">
+            <el-input v-model="Dialog.lastTicket" auto-complete="off"></el-input>
           </el-col>
         </el-form-item>
       </el-form>
@@ -132,55 +161,74 @@
 </style>
 
 <script>
+  import axios from 'axios'
   export default {
     data () {
       return {
         dialogVisible: false,
         form: {
-          region: '',
+          trainNumber: '',
           date: ''
         },
         Dialog: {
           number: Number,
-          date: '',
           trainNumber: '',
-          departure: '',
+          date: '',
           departureTime: '',
+          departure: '',
           arrival: '',
-          arrivalTime: ''
+          trainType: '',
+          availableTicket: '',
+          soldTicket: '',
+          lastTicket: ''
         },
-        tableData: [{
-          number: 1,
-          date: '2016-05-02',
-          trainNumber: 'E888',
-          departure: '上',
-          departureTime: '20:44',
-          arrival: 'asdjaskl',
-          arrivalTime: '22:09'
-        }, {
-          number: 2,
-          date: '2016-05-02',
-          trainNumber: 'E888',
-          departure: '上asd',
-          departureTime: '20:44',
-          arrival: 'asdjaskl',
-          arrivalTime: '22:09'
-        }]
+        tableData: []
       }
     },
     methods: {
       onSubmit () {
         console.log('submit!')
       },
+      search () {
+        axios({
+          url: '/getTrainInfo',
+          method: 'post',
+          data: {
+            '车次': this.trainNumber,
+            '日期': this.date
+          }
+        }).then((response) => {
+          this.tableData = []
+          for (let o in response.data) {
+            this.tableData.push({
+              number: this.tableData.length + 1,
+              trainNumber: response.data[o]['车次'],
+              date: response.data[o]['日期'],
+              departureTime: response.data[o]['发车时间'],
+              departure: response.data[o]['始发站'],
+              arrival: response.data[o]['终点站'],
+              trainType: response.data[o]['车型'],
+              availableTicket: response.data[o]['额定可售票数'],
+              soldTicket: response.data[o]['已售票数'],
+              lastTicket: response.data[o]['剩余票数']
+            })
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
+      },
       add () {
         this.Dialog = {
           number: Number,
-          date: '',
           trainNumber: '',
-          departure: '',
+          date: '',
           departureTime: '',
+          departure: '',
           arrival: '',
-          arrivalTime: ''
+          trainType: '',
+          availableTicket: '',
+          soldTicket: '',
+          lastTicket: ''
         }
         this.Dialog.number = this.tableData.length + 1
       },
@@ -188,15 +236,25 @@
         // console.log(row)
         this.$confirm('确认删除？')
           .then(_ => {
-            if (this.tableData.length > 1) {
-              for (let i = row.number - 1; i < this.tableData.length - 1; i++) {
-                this.tableData[i] = this.tableData[i + 1]
-                this.tableData[i].number--
+            axios({
+              url: '/deleteTrainInfo',
+              method: 'post',
+              data: {
+                '车次': this.tableData[row.number - 1].trainNumber
               }
-              this.tableData.pop()
-            } else {
-              this.tableData = ''
-            }
+            }).then((response) => {
+              if (this.tableData.length > 1) {
+                for (let i = row.number - 1; i < this.tableData.length - 1; i++) {
+                  this.tableData[i] = this.tableData[i + 1]
+                  this.tableData[i].number--
+                }
+                this.tableData.pop()
+              } else {
+                this.tableData = ''
+              }
+            }).catch((error) => {
+              console.log(error)
+            })
           })
           .catch(_ => {})
       },
@@ -206,13 +264,43 @@
         }
       },
       modifyThis () {
-        if (this.Dialog.number > this.tableData.length) {
-          this.tableData.push(this.Dialog)
-        } else {
-          for (let i in this.Dialog) {
-            this.tableData[this.Dialog.number - 1][i] = this.Dialog[i]
+        axios({
+          url: '/addTrainInfo',
+          method: 'post',
+          data: {
+            '车次': this.Dialog.trainNumber,
+            '日期': this.Dialog.date,
+            '发车时间': this.Dialog.departureTime,
+            '始发站': this.Dialog.departure,
+            '终点站': this.Dialog.arrival,
+            '车型': this.Dialog.trainType,
+            '额定可售票数': this.Dialog.availableTicket,
+            '已售票数': this.Dialog.soldTicket,
+            '剩余票数': this.lastTicket
           }
-        }
+        }).then((response) => {
+          if (this.Dialog.number > this.tableData.length) {
+            this.tableData.push(this.Dialog)
+          } else {
+            for (let i in this.Dialog) {
+              this.tableData[this.Dialog.number - 1][i] = this.Dialog[i]
+            }
+          }
+          this.Dialog = {
+            number: Number,
+            trainNumber: '',
+            date: '',
+            departureTime: '',
+            departure: '',
+            arrival: '',
+            trainType: '',
+            availableTicket: '',
+            soldTicket: '',
+            lastTicket: ''
+          }
+        }).catch((error) => {
+          console.log(error)
+        })
       }
     }
   }

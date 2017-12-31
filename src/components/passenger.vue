@@ -1,8 +1,5 @@
 <template>
 <el-container>
-  <!-- <el-header>
-    <el-button type="primary" class="add-train">增加车次信息</el-button>
-  </el-header> -->
   <el-header class="main">
     <el-col :span="22">
       <el-form ref="form" :model="form" label-width="80px">
@@ -10,12 +7,11 @@
           <el-row type="flex" class="row-bg" justify="space-between">
             <el-col :span="5" :offset="3">
               <el-input
-                placeholder="请输入姓名或身份证号"
+                placeholder="请输入车次"
                 v-model="form.departure">
               </el-input>
             </el-col>
             <el-col :span="9">
-              <!-- <span class="demonstration">日期</span> -->
               <el-date-picker
                 v-model="form.date"
                 type="date"
@@ -23,55 +19,55 @@
               </el-date-picker>
             </el-col>
             <el-col :span="6">
-              <el-button type="primary" @click="onSubmit">查询</el-button>
-              <!-- <el-button>重置</el-button> -->
+              <el-button type="primary" @click="search()">查询</el-button>
             </el-col>
           </el-row>
         </el-form-item>
       </el-form>
     </el-col>
-    <!-- <el-col :span="6">
-      <el-button type="primary" class="add-train">增加车次信息</el-button>
-    </el-col> -->
   </el-header>
   <el-main v-if="isShow">
     <el-table
       :data="tableData"
       stripe
       border
-      style="width: 82%;margin:0 auto;text-align:left"
+      style="width: 70%;margin:0 auto;text-align:left"
       height="450">
       <el-table-column
-        prop="date"
-        label="序号">
+        prop="number"
+        label="序号"
+        width="90">
       </el-table-column>
       <el-table-column
-        prop="date"
-        label="姓名">
+        prop="realName"
+        label="姓名"
+        width="90">
       </el-table-column>
       <el-table-column
-        prop="name"
-        label="日期">
+        prop="identityNumber"
+        label="身份证号"
+        width="180">
       </el-table-column>
       <el-table-column
-        prop="address"
-        label="始发站">
+        prop="trainNumber"
+        label="车次"
+        width="90">
       </el-table-column>
       <el-table-column
-        prop="address"
-        label="到达站">
+        prop="ticketNumber"
+        label="车票号"
+        width="180">
       </el-table-column>
       <el-table-column
-        prop="address"
-        label="出发时间">
+        prop="phoneNumber"
+        label="联系方式"
+        width="150">
       </el-table-column>
       <el-table-column
-        prop="address"
-        label="到达时间">
-      </el-table-column>
-      <el-table-column>
+        label="操作"
+        width="102">
         <template slot-scope="scope">
-          <el-button type="text" @click="viewPassenger">查看</el-button>
+          <el-button size="mini" type="danger" @click="deleteThis(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -94,6 +90,7 @@
 
 <script>
   import pd from './passenger-detail.vue'
+  import axios from 'axios'
   export default {
     components: {
       pd
@@ -105,35 +102,58 @@
           region: '',
           date: ''
         },
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上'
-        }]
+        tableData: []
       }
     },
     methods: {
-      onSubmit () {
-        console.log('submit!')
+      search () {
+        axios({
+          url: '/getPassengerInfo',
+          method: 'post',
+          data: {
+            '车次': this.trainNumber,
+            '日期': this.date
+          }
+        }).then((response) => {
+          for (let o in response.data) {
+            this.tableData.push({
+              number: this.tableData.length + 1,
+              realName: response.data[o]['乘客名'],
+              identityNumber: response.data[o]['乘客身份证号'],
+              trainNumber: response.data[o]['车次'],
+              ticketNumber: response.data[o]['车票号'],
+              phoneNumber: response.data[o]['联系方式']
+            })
+          }
+        })
       },
       viewPassenger () {
         this.isShow = 0
+      },
+      deleteThis (row) {
+        this.$confirm('确认删除？')
+          .then(_ => {
+            axios({
+              url: '/deleteTicketInfo',
+              method: 'post',
+              data: {
+                '车票号': this.tableData[row.number - 1].ticketNumber
+              }
+            }).then((response) => {
+              if (this.tableData.length > 1) {
+                for (let i = row.number - 1; i < this.tableData.length - 1; i++) {
+                  this.tableData[i] = this.tableData[i + 1]
+                  this.tableData[i].number--
+                }
+                this.tableData.pop()
+              } else {
+                this.tableData = ''
+              }
+            }).catch((error) => {
+              console.log(error)
+            })
+          })
+          .catch(_ => {})
       },
       backk (res) {
         this.isShow = 1

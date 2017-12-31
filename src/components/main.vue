@@ -9,13 +9,14 @@
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b">
-        <span>火车票管理系统</span>
+        <span>火车票务管理系统</span>
         <el-menu-item index="1" v-show="identity-1" @click="$router.push({path: '/main/train'})">车次管理</el-menu-item>
         <el-menu-item index="2" v-show="identity-1" @click="$router.push({path: '/main/passenger'})">乘客管理</el-menu-item>
-        <el-menu-item index="3" v-show="identity-1" @click="$router.push({path: '/main/analysis'})">统计分析</el-menu-item>
-        <el-menu-item index="4" v-show="!(identity-1)" @click="$router.push({path: '/main/analysis'})">购票</el-menu-item>
+        <!-- <el-menu-item index="3" v-show="identity-1" @click="$router.push({path: '/main/analysis'})">统计分析</el-menu-item> -->
+        <el-menu-item index="3" v-show="!(identity-1)" @click="$router.push({path: '/main/buy'})">购票</el-menu-item>
+        <el-menu-item index="4" v-show="!(identity-1)" @click="$router.push({path: '/main/ticketInformation'})">订票信息</el-menu-item>
         <div style="position:absolute;right:0;user-select: none;cursor: default;">
-          <span style="font-size:16px;" @click="cc">欢迎您，userName</span>
+          <span style="font-size:16px;" @click="cc">欢迎您，{{userName}}</span>
           <el-button size="mini" id="log-out" @click="signUp">注销</el-button>
         </div>
       </el-menu>
@@ -31,9 +32,9 @@
   export default {
     data () {
       return {
-        activeIndex: '1',
         activeIndex2: '1',
-        identity: this.$store.state.identity
+        identity: this.$store.state.identity,
+        userName: this.$store.state.userInfo['名字']
       }
     },
     mounted () {
@@ -42,7 +43,7 @@
         self.$router.push({path: '/'})
       }
       if (self.$store.state.identity === 1) {
-        self.activeIndex2 = '4'
+        self.activeIndex2 = '3'
       }
       let t = document.getElementsByClassName('top')
       let p = document.getElementById('log-out')
@@ -62,7 +63,9 @@
         console.log(key, keyPath)
       },
       cc () {
-        console.log(this.identity)
+        console.log(this.$store.state.userInfo)
+        console.log(this.$store.state.identity)
+        console.log(this.activeIndex2)
       }
     }
   }

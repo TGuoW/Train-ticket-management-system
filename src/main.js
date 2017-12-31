@@ -58,6 +58,7 @@ Vue.use(Card)
 Vue.use(Option)
 
 Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$alert = MessageBox.alert
 
 const store = new Vuex.Store({
   state: {
@@ -66,15 +67,17 @@ const store = new Vuex.Store({
     userInfo: {}
   },
   mutations: {
-    login (state, p) {
+    login (state, u) {
       state.isLogin = true
+      state.userInfo = u
+    },
+    c (state, p) {
       state.identity = p
-      state.userInfo = p
     },
     signUp (state, p) {
       state.isLogin = false
       state.identity = 0
-      state.userInfo = {}
+      state.userName = {}
     }
   }
 })

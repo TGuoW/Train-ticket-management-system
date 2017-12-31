@@ -2,10 +2,10 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import train from '@/components/train'
-import analysis from '@/components/analysis'
 import main from '@/components/main'
 import passenger from '@/components/passenger'
 import buy from '@/components/buy'
+import ticketInformation from '@/components/ticketInformation'
 
 Vue.use(Router)
 
@@ -33,12 +33,12 @@ export default new Router({
           component: passenger
         },
         {
-          path: 'analysis',
-          component: analysis
-        },
-        {
           path: 'buy',
           component: buy
+        },
+        {
+          path: 'ticketInformation',
+          component: ticketInformation
         }
       ]
     }
