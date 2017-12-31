@@ -37,23 +37,26 @@
         </el-tab-pane>
         <el-tab-pane label="乘客注册" name="second" style="margin:auto;text-align:center;">
           <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="40px" class="demo-ruleForm">
-            <el-form-item>
+            <el-form-item prop="identityNumber">
               <el-input v-model="ruleForm2.identityNumber" auto-complete="off" placeholder="身份证号"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="realName">
               <el-input v-model="ruleForm2.realName" auto-complete="off" placeholder="真实姓名"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="userName">
               <el-input v-model="ruleForm2.userName" auto-complete="off" placeholder="用户名"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="password">
               <el-input type="password" v-model="ruleForm2.password" auto-complete="off" placeholder="密码"></el-input>
             </el-form-item>
-            <el-form-item>
+            <el-form-item prop="checkPassword">
+              <el-input type="password" v-model="ruleForm2.checkPassword" auto-complete="off" placeholder="密码"></el-input>
+            </el-form-item>
+            <el-form-item prop="phoneNumber">
               <el-input v-model="ruleForm2.phoneNumber" auto-complete="off" placeholder="联系方式"></el-input>
             </el-form-item>
             <el-form-item style="text-align:center">
-              <el-button type="success" @click="registered()" class="login">注册</el-button>
+              <el-button type="success" @click="registered('ruleForm2')" class="login">注册</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -69,7 +72,7 @@ export default {
   data () {
     var validateAcount = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入账号'))
+        callback(new Error('请输入用户名'))
       } else {
         callback()
       }
@@ -91,8 +94,29 @@ export default {
     var validateCheckPass = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入确认密码'))
-      } else if (value !== this.ruleForm2.pass) {
+      } else if (value !== this.ruleForm2.password) {
         callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+    var validateIdentityNumber = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入身份证号'))
+      } else {
+        callback()
+      }
+    }
+    var validateRealName = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入真实姓名'))
+      } else {
+        callback()
+      }
+    }
+    var validatePhoneNumber = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入联系方式'))
       } else {
         callback()
       }
@@ -124,16 +148,27 @@ export default {
         ]
       },
       rules2: {
-        acount: [
+        identityNumber: [
+          { min: 18, max: 18, message: '长度为18位', trigger: 'blur' },
+          { validator: validateIdentityNumber, trigger: 'blur' }
+        ],
+        realName: [
+          { validator: validateRealName, trigger: 'blur' }
+        ],
+        userName: [
           { validator: validateAcount, trigger: 'blur' }
         ],
-        pass: [
+        password: [
           { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
           { validator: validatePass, trigger: 'blur' }
         ],
-        checkPass: [
+        checkPassword: [
           { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
           { validator: validateCheckPass, trigger: 'blur' }
+        ],
+        phoneNumber: [
+          { min: 11, max: 11, message: '长度为11位', trigger: 'blur' },
+          { validator: validatePhoneNumber, trigger: 'blur' }
         ]
       }
     }
@@ -299,39 +334,46 @@ export default {
         }
       })
     },
-    registered () {
+    registered (formName) {
       let self = this
-      axios({
-        url: '/signUp',
-        method: 'post',
-        data: {
-          '身份证号': self.ruleForm2.identityNumber,
-          '名字': self.ruleForm2.realName,
-          '用户名': self.ruleForm2.userName,
-          '密码': self.ruleForm2.password,
-          '联系方式': self.ruleForm2.phoneNumber
-        }
-      }).then((response) => {
-        console.log('注册成功')
-        this.$alert('注册成功', '提示', {
-          confirmButtonText: '确定',
-          callback: action => {
-            this.$message({
-              type: 'info'
+      self.$refs[formName].validate((valid) => {
+        if (valid) {
+          axios({
+            url: '/signUp',
+            method: 'post',
+            data: {
+              '身份证号': self.ruleForm2.identityNumber,
+              '名字': self.ruleForm2.realName,
+              '用户名': self.ruleForm2.userName,
+              '密码': self.ruleForm2.password,
+              '联系方式': self.ruleForm2.phoneNumber
+            }
+          }).then((response) => {
+            console.log('注册成功')
+            this.$alert('注册成功', '提示', {
+              confirmButtonText: '确定',
+              callback: action => {
+                this.$message({
+                  type: 'info'
+                })
+              }
+            }).catch((error) => {
+              console.log(error)
             })
-          }
-        }).catch((error) => {
-          console.log(error)
-        })
-        this.ruleForm2 = {
-          identityNumber: '',
-          realName: '',
-          userName: '',
-          password: '',
-          phoneNumber: ''
+            this.ruleForm2 = {
+              identityNumber: '',
+              realName: '',
+              userName: '',
+              password: '',
+              phoneNumber: ''
+            }
+          }).catch((error) => {
+            console.log(error)
+          })
+        } else {
+          console.log('error submit!!')
+          return false
         }
-      }).catch((error) => {
-        console.log(error)
       })
     },
     resetForm (formName) {
