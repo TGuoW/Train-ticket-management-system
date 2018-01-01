@@ -149,6 +149,11 @@
               } else {
                 this.tableData = ''
               }
+              this.$alert('删除成功', '提示', {
+                confirmButtonText: '确定'
+              }).catch((error) => {
+                console.log(error)
+              })
             }).catch((error) => {
               console.log(error)
             })

@@ -214,12 +214,7 @@
           }
         }).then((response) => {
           this.$alert('订票成功', '提示', {
-            confirmButtonText: '确定',
-            callback: action => {
-              this.$message({
-                type: 'info'
-              })
-            }
+            confirmButtonText: '确定'
           }).catch((error) => {
             console.log(error)
           })

@@ -5,25 +5,33 @@
       <el-form ref="form" :model="form" label-width="80px">
         <el-form-item>
           <el-row type="flex" class="row-bg" justify="space-between">
-            <el-col :span="6" :offset="3">
+            <el-col :span="4" :offset="3">
+              <el-input v-model="form.departure" placeholder="输入始发站">
+              </el-input>
+            </el-col>
+            <el-col :span="4" :offset="1">
+              <el-input v-model="form.arrival" placeholder="输入终点站">
+              </el-input>
+            </el-col>
+            <el-col :span="4" :offset="1">
               <el-input v-model="form.trainNumber" placeholder="输入车次">
               </el-input>
             </el-col>
-            <el-col :span="9">
+            <el-col :span="8" :offset="1">
               <el-date-picker
                 v-model="form.date"
                 type="date"
-                placeholder="选择日期">
+                placeholder="选择日期(必填)">
               </el-date-picker>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="4">
               <el-button type="primary" @click="search()">查询</el-button>
             </el-col>
           </el-row>
         </el-form-item>
       </el-form>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="5" :offset="1">
       <el-button type="primary" class="add-train" @click="dialogVisible = true;add()">增加车次信息</el-button>
     </el-col>
   </el-header>
@@ -88,7 +96,7 @@
         label="操作"
         width="160">
         <template slot-scope="scope">
-          <el-button size="mini" @click="dialogVisible = true;beforeModifyThis(scope.row)">修改</el-button>
+          <el-button size="mini" type="primary" @click="dialogVisible = true;beforeModifyThis(scope.row)">修改</el-button>
           <el-button size="mini" type="danger" @click="deleteThis(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -167,6 +175,8 @@
       return {
         dialogVisible: false,
         form: {
+          departure: '',
+          arrival: '',
           trainNumber: '',
           date: ''
         },
@@ -198,6 +208,7 @@
             '日期': this.date
           }
         }).then((response) => {
+          console.log(this.form)
           this.tableData = []
           for (let o in response.data) {
             this.tableData.push({
@@ -252,6 +263,11 @@
               } else {
                 this.tableData = ''
               }
+              this.$alert('删除成功', '提示', {
+                confirmButtonText: '确定'
+              }).catch((error) => {
+                console.log(error)
+              })
             }).catch((error) => {
               console.log(error)
             })
@@ -265,7 +281,7 @@
       },
       modifyThis () {
         axios({
-          url: '/addTrainInfo',
+          url: '/updateTrainInfo',
           method: 'post',
           data: {
             '车次': this.Dialog.trainNumber,
@@ -286,6 +302,11 @@
               this.tableData[this.Dialog.number - 1][i] = this.Dialog[i]
             }
           }
+          this.$alert('修改成功', '提示', {
+            confirmButtonText: '确定'
+          }).catch((error) => {
+            console.log(error)
+          })
           this.Dialog = {
             number: Number,
             trainNumber: '',

@@ -100,15 +100,15 @@
         <el-form-item>
           <el-col :span="3">乘客姓名</el-col>
           <el-col :span="5">
-            <el-input v-model="Dialog.realName" auto-complete="off"></el-input>
+            <el-input v-model="Dialog.realName"  :disabled="true" auto-complete="off"></el-input>
           </el-col>
           <el-col :span="3">身份证号</el-col>
           <el-col :span="5">
-            <el-input v-model="Dialog.identityNumber" auto-complete="off"></el-input>
+            <el-input v-model="Dialog.identityNumber" :disabled="true" auto-complete="off"></el-input>
           </el-col>
           <el-col :span="3">联系方式</el-col>
           <el-col :span="5">
-            <el-input v-model="Dialog.phoneNumber" auto-complete="off"></el-input>
+            <el-input v-model="Dialog.phoneNumber" :disabled="true" auto-complete="off"></el-input>
           </el-col>
         </el-form-item>
       </el-form>
@@ -136,11 +136,6 @@
     data () {
       return {
         dialogVisible: false,
-        form: {
-          departure: '',
-          destination: '',
-          date: ''
-        },
         Dialog: {
           number: Number,
           ticketNumber: '',
@@ -192,19 +187,26 @@
           method: 'post',
           data: {
             '车票号': this.Dialog.ticketNumber,
-            '身份证号': this.$store.data.userInfo['身份证号']
+            '身份证号': this.$store.state.userInfo['身份证号']
           }
         }).then((response) => {
-          this.$alert('修改成功', '提示', {
-            confirmButtonText: '确定',
-            callback: action => {
-              this.$message({
-                type: 'info'
-              })
-            }
-          }).catch((error) => {
-            console.log(error)
-          })
+          for (let o in this.Dialog) {
+            this.tableData[this.Dialog.number - 1][o] = this.Dialog[o]
+          }
+          this.Dialog = {
+            number: Number,
+            ticketNumber: '',
+            trainNumber: '',
+            identityNumber: '',
+            realName: '',
+            phoneNumber: '',
+            date: '',
+            departureTime: '',
+            departure: '',
+            arrival: ''
+          }
+        }).catch((error) => {
+          console.log(error)
         })
       },
       deleteThis (row) {
@@ -215,7 +217,7 @@
               method: 'post',
               data: {
                 '车票号': row.ticketNumber,
-                '身份证号': this.$store.data.userInfo['身份证号']
+                '身份证号': this.$store.state.userInfo['身份证号']
               }
             }).then((response) => {
               if (this.tableData.length > 1) {
@@ -225,11 +227,20 @@
                 }
                 this.tableData.pop()
               } else {
-                this.tableData = ''
+                this.tableData = []
               }
+              this.$alert('退票成功', '提示', {
+                confirmButtonText: '确定'
+              }).catch((error) => {
+                console.log(error)
+              })
+            }).catch((error) => {
+              console.log(error)
             })
           })
-          .catch(_ => {})
+          .catch(_ => {
+            console.log(_)
+          })
       }
     }
   }
